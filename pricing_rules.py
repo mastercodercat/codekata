@@ -42,3 +42,17 @@ class PricingRules:
             smallest_quantity = self.rules[item][-1].quantity
             if smallest_quantity > 1:
                 raise ValueError("Must provide unit price")
+
+    def total_for_item(self, item, quantity):
+        result = Decimal(0)
+        for rule in self.rules[item]:
+            subtotal, quantity = rule.apply(quantity)
+            result += subtotal
+        assert quantity == 0
+        return result
+
+    def total(self, item_quantities):
+        result = Decimal(0)
+        for item, quantity in item_quantities.items():
+            result += self.total_for_item(item, quantity)
+        return result
