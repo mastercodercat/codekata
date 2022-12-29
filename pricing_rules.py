@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+
 class NforY:
     def __init__(self, item, quantity, price):
         if not (isinstance(price, Decimal) or isinstance(price, int)):
@@ -15,4 +16,8 @@ class NforY:
     def apply(self, num_in_cart):
         quotient, remainder = divmod(num_in_cart, self.quantity)
         return Decimal(quotient * self.price), remainder
-        
+
+
+class UnitPrice(NforY):
+    def __init__(self, item, price):
+        super().__init__(item, 1, price)
