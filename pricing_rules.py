@@ -1,4 +1,5 @@
 from decimal import Decimal
+from collections import defaultdict
 
 
 class NforY:
@@ -21,3 +22,9 @@ class NforY:
 class UnitPrice(NforY):
     def __init__(self, item, price):
         super().__init__(item, 1, price)
+
+class PricingRules:
+    def __init__(self, rules):
+        self.rules = defaultdict(list)
+        for rule in rules:
+            self.rules[rule.item].append(rule)
