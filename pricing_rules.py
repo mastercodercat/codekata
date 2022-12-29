@@ -23,8 +23,22 @@ class UnitPrice(NforY):
     def __init__(self, item, price):
         super().__init__(item, 1, price)
 
+
 class PricingRules:
     def __init__(self, rules):
         self.rules = defaultdict(list)
         for rule in rules:
             self.rules[rule.item].append(rule)
+
+        for item, rules in self.rules.items():
+            self.rules[item] = sorted(rules,
+                                      key=lambda r: (r.quantity, r.price),
+                                      reverse=True)
+
+            prices = [r.price for r in self.rules[item]]
+            if any(x < y for x, y in zip(prices, prices[1:])):
+                raise ValueError("Prices are decreasing")
+
+            smallest_quantity = self.rules[item][-1].quantity
+            if smallest_quantity > 1:
+                raise ValueError("Must provide unit price")
